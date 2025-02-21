@@ -37,6 +37,10 @@ public fun get_score(comment: &Comment): u64 {
     comment.score
 }
 
+public fun get_text(comment: &Comment): String {
+    comment.text
+}
+
 public fun modify_score(ctx: &mut TxContext, comment: &mut Comment, score: u64) {
     assert!(ctx.sender() == comment.owner, ENotOwner);
     comment.score = score;
