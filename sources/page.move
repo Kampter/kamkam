@@ -25,7 +25,6 @@ public struct Game has key, store {
     num_comments: u64, // The number of comments of the game
     average_score: u64, // The average score of the game
     comments: vector<address>, // The comments of the game
-    blobs: vector<String>, 
     b36string: String,
 }
 
@@ -67,7 +66,6 @@ public entry fun add_game(page: &mut Page, name: String, ctx: &mut TxContext) {
         num_comments: 0,
         average_score: 0,
         comments: vector::empty(),
-        blobs: vector::empty(),
         b36string
     };
     assert!(!page.games.contains(&object_address), EALREADY_EXISTS);
@@ -79,11 +77,6 @@ public entry fun add_game(page: &mut Page, name: String, ctx: &mut TxContext) {
         name: name,
         b36string: b36string
     });  
-}
-
-public entry fun add_blob(game: &mut Game, blob: String) {
-    assert!(!game.blobs.contains(&blob), EALREADY_EXISTS);
-    vector::push_back(&mut game.blobs, blob);
 }
 
 #[allow(lint(self_transfer))]
