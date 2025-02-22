@@ -26,7 +26,7 @@ public struct Game has key, store {
     average_score: u64, // The average score of the game
     comments: vector<address>, // The comments of the game
     blobs: vector<String>, 
-    b36string: vector<address>,
+    b36string: String,
 }
 
 public struct EGameAdded has copy, drop {
@@ -53,7 +53,7 @@ fun init (otw: PAGE, ctx: &mut TxContext) {
     transfer::public_transfer(site_display, ctx.sender());
 }
 
-public entry fun add_game(page: &mut Page, name: String, ctx: &mut TxContext, ) {
+public entry fun add_game(page: &mut Page, name: String, ctx: &mut TxContext) {
     let sender = ctx.sender();
     let id =  object::new(ctx);
     let object_address = object::uid_to_address(&id);
@@ -68,7 +68,7 @@ public entry fun add_game(page: &mut Page, name: String, ctx: &mut TxContext, ) 
         average_score: 0,
         comments: vector::empty(),
         blobs: vector::empty(),
-        b36string: vector::empty(),
+        b36string
     };
     assert!(!page.games.contains(&object_address), EALREADY_EXISTS);
     vector::push_back(&mut page.games,object_address);
@@ -79,6 +79,11 @@ public entry fun add_game(page: &mut Page, name: String, ctx: &mut TxContext, ) 
         name: name,
         b36string: b36string
     });  
+}
+
+public entry fun add_blob(game: &mut Game, blob: String) {
+    assert!(!game.blobs.contains(&blob), EALREADY_EXISTS);
+    vector::push_back(&mut game.blobs, blob);
 }
 
 #[allow(lint(self_transfer))]
